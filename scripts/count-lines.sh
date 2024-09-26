@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-set -x
+# set -x
 
 TARGET_DIR=$1
 IGNORE_RULE=$2
@@ -44,7 +44,6 @@ case "$IGNORE_RULE" in
     ;;
 esac
 
-echo $GITHUB_OUTPUT >&2
 echo "line_count=$line_count" >> $GITHUB_OUTPUT
 
 popd

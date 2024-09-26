@@ -1,18 +1,18 @@
-name: Developer workflow
+name: CI
 
 on:
   pull_request:
   push:
     branches:
       - main
-  workflow_call:
+  workflow_dispatch:
     inputs:
       repo:
         type: string
         required: false
 
 env:
-  COUNT_LINES_REPO: ${{ inputs.repo || 'kir-dev/cmsch' }}
+  TARGET_REPO: ${{ inputs.repo || 'kir-dev/cmsch' }}
 
 jobs:
   count-lines:
@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: ${{ env.COUNT_LINES_REPO }}
+          repository: ${{ env.TARGET_REPO }}
       - uses: kir-dev/automations/actions/count-lines@main
         id: counter
         with:
@@ -34,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: ${{ env.COUNT_LINES_REPO }}
+          repository: ${{ env.TARGET_REPO }}
       - uses: kir-dev/automations/actions/count-lines-docker@main
         id: counter
         with:

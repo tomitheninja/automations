@@ -1,0 +1,29 @@
+name: A.I.M.A.
+description: Automation Images Manager Action
+inputs:
+  registry:
+    required: true
+    description: 'The docker registry to use'
+  namespace:
+    required: true
+    description: "Prefix of the docker image name"
+  docker-tag:
+    required: true
+    description: 'Docker tag to assign to the image'
+  extra-args:
+    default: ''
+    description: 'Extra args to pass to docker build'
+  command_path:
+    description: "Path to the script that will be executed"
+    required: true
+    default: $GITHUB_ACTION_PATH/../../scripts
+runs:
+  using: "composite"
+  steps:
+    - uses: docker/setup-buildx-action@v3
+    - shell: bash
+      run: |
+        ${{ inputs.command_path }}/build-docker-actions.sh \
+          ${{ inputs.registry }}/${{ inputs.namespace }} \
+          ${{ inputs.docker-tag }} \
+          '${{ inputs.extra-args }}'
