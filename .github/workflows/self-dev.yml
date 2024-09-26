@@ -28,3 +28,17 @@ jobs:
       - name: Generate summary
         run: |
           echo 'There are ${{ steps.counter.outputs.line_count }} lines in this project' >> $GITHUB_STEP_SUMMARY
+
+  count-lines-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.COUNT_LINES_REPO }}
+      - uses: kir-dev/automations/actions/count-lines-docker@main
+        id: counter
+        with:
+          target_directory: .
+      - name: Generate summary
+        run: |
+          echo 'There are ${{ steps.counter.outputs.line_count }} lines in this project' >> $GITHUB_STEP_SUMMARY

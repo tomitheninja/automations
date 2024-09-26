@@ -1,0 +1,19 @@
+name: "Count Lines Docker"
+description: "Counts the number of lines in a specified directory and outputs the result."
+inputs:
+  target_directory:
+    description: "The directory to count lines in"
+    required: true
+  ignore_rule:
+    description: "Rule to apply for ignoring files: 'git' for .gitignore, 'hidden' for hidden directories, or 'none' for no exclusions."
+    required: true
+    default: "git"
+outputs:
+  line_count:
+    description: "The number of lines counted in the directory"
+runs:
+  using: docker
+  image: ../../scripts/count-lines.Dockerfile
+  args:
+    - ${{ inputs.target_directory }}
+    - ${{ inputs.ignore_rule }}
