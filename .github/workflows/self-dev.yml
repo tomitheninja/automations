@@ -1,0 +1,30 @@
+name: Developer workflow
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_call:
+    inputs:
+      repo:
+        type: string
+        required: false
+
+env:
+  COUNT_LINES_REPO: ${{ inputs.repo || 'kir-dev/cmsch' }}
+
+jobs:
+  count-lines:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.COUNT_LINES_REPO }}
+      - uses: kir-dev/automations/actions/count-lines@main
+        id: counter
+        with:
+          target_directory: .
+      - name: Generate summary
+        run: |
+          echo 'There are ${{ steps.counter.outputs.line_count }} lines in this project' >> $GITHUB_STEP_SUMMARY

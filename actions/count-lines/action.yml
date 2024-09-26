@@ -1,0 +1,25 @@
+name: "Count Lines"
+description: "Counts the number of lines in a specified directory and outputs the result."
+inputs:
+  target_directory:
+    description: "The directory to count lines in"
+    required: true
+  ignore_rule:
+    description: "Rule to apply for ignoring files: 'git' for .gitignore, 'hidden' for hidden directories, or 'none' for no exclusions."
+    required: true
+    default: "git"
+  command_path:
+    description: "Path to the script that will be executed"
+    required: true
+    default: $GITHUB_ACTION_PATH/../../scripts/count-lines.sh
+outputs:
+  line_count:
+    description: "The number of lines counted in the directory"
+    value: ${{ steps.run-script.outputs.line_count }}
+runs:
+  using: composite
+  steps:
+    - name: Run script
+      id: run-script
+      shell: bash
+      run: ${{ inputs.command_path }} ${{ inputs.target_directory }} ${{ inputs.ignore_rule }}
