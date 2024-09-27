@@ -71,11 +71,4 @@ jobs:
           registry: ${{ env.DOCKER_REGISTRY }}
           namespace: ${{ env.DOCKER_NAMESPACE }}
           docker-tag: ${{ env.DOCKER_TAG }}
-          extra-args: ${{ env.DOCKER_EXTRA_ARGS }}
-
-      - uses: ./actions/infra-build-images
-        with:
-          registry: ${{ env.DOCKER_REGISTRY }}
-          namespace: ${{ env.DOCKER_NAMESPACE }}
-          docker-tag: ${{ env.DOCKER_TAG }}
           extra-args: --push ${{ env.DOCKER_EXTRA_ARGS }}
