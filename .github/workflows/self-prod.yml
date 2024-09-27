@@ -32,6 +32,8 @@ jobs:
             echo 'environments=["staging", "production"]' >> "$GITHUB_OUTPUT"
           fi
 
+      - run: cat $GITHUB_OUTPUT | grep 'environments=' >> $GITHUB_STEP_SUMMARY
+
   depoy:
     runs-on: ubuntu-latest
 
