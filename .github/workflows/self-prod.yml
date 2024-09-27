@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - tomitheninja-main
   workflow_dispatch:
     inputs:
       environment:
@@ -24,11 +25,7 @@ jobs:
 
     strategy:
       matrix:
-        environment:
-          - ${{ github.event_name == 'workflow_dispatch' && inputs.environment || null }}
-          - ${{ github.event_name != 'workflow_dispatch' && 'staging' || null }}
-          - ${{ github.event_name != 'workflow_dispatch' && 'production' || null }}
-
+        environment: ${{ github.event_name == 'workflow_dispatch' && inputs.environment || fromJson('["staging", "production"]') }}
       max-parallel: 1
 
     environment: ${{ inputs.environment || matrix.environment }}
