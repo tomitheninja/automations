@@ -25,7 +25,7 @@ jobs:
     strategy:
       matrix:
         environment: ${{ fromJson(
-          github.event_name == 'workflow_dispatch' && '["_ignored_"]' || '["staging", "production"]') }}
+          github.event_name == 'workflow_dispatch' && '["_no_matrix_"]' || '["staging", "production"]') }}
       max-parallel: 1
 
     environment: ${{ inputs.environment || matrix.environment }}
