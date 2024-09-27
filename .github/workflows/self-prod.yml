@@ -16,6 +16,21 @@ on:
           - production
 
 jobs:
+  define-environment:
+    runs-on: ubuntu-latest
+
+    outputs:
+      environments: ${{ steps.set-env.outputs.environments }}
+
+    steps:
+      - id: set-env
+        run: if [ "${{ github.event_name }}" == "workflow_dispatch" ]
+          then
+          echo "environments=[\"${{ github.event.inputs.environment }}\"]" >> "$GITHUB_OUTPUT"
+          else
+          echo 'environments=["staging", "production"]' >> "$GITHUB_OUTPUT"
+          fi
+
   depoy:
     runs-on: ubuntu-latest
 
@@ -23,12 +38,12 @@ jobs:
       contents: read
       packages: write
 
+    needs:
+      - define-environment
+
     strategy:
       matrix:
-        environment:
-          - ${{ inputs.environment || null }}
-          - ${{ !inputs.environment && 'staging' }}
-          - ${{ !inputs.environment && 'production' }}
+        environment: ${{ fromJSON(needs.define-environment.outputs.environments) }}
 
     environment: ${{ inputs.environment || matrix.environment }}
 
