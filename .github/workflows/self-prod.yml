@@ -24,7 +24,7 @@ jobs:
 
     strategy:
       matrix:
-        environment: ${{ github.event_name == 'workflow_dispatch' && null || fromJson('["staging", "production"]') }}
+        environment: ${{ github.event_name == 'workflow_dispatch' && github.inputs || fromJson('["staging", "production"]') }}
       max-parallel: 1
 
     environment: ${{ inputs.environment || matrix.environment }}
@@ -51,7 +51,7 @@ jobs:
           namespace: ${{ env.DOCKER_NAMESPACE }}
           docker-tag: ${{ env.DOCKER_TAG }}
           extra-args: ${{ env.DOCKER_EXTRA_ARGS }}
-      
+
       - uses: ./actions/infra-build-images
         with:
           registry: ${{ env.DOCKER_REGISTRY }}
