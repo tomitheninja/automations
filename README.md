@@ -1,4 +1,4 @@
-# Kir-Dev Automations
+# Kir-Dev Automations.
 
 This repository contains all automation scripts, reusable GitHub Actions, and build pipelines used across our projects. The repository is structured as a monorepo to streamline management and collaboration across multiple projects and tools.
 
