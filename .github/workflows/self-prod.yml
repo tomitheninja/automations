@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Select the environment to deploy'
+        description: "Select the environment to deploy"
         required: true
         type: choice
         options:
@@ -25,13 +25,13 @@ jobs:
     strategy:
       matrix:
         environment: ${{ fromJson(
-          github.event_name == 'workflow_dispatch' && '["${{ inputs.environment }}"]' || '["staging", "production"]') }}
+          github.event_name == 'workflow_dispatch' && '["_ignored_"]' || '["staging", "production"]') }}
       max-parallel: 1
 
-    environment: ${{ matrix.environment }}
+    environment: ${{ inputs.environment || matrix.environment }}
 
     env:
-      DOCKER_TAG: ${{ matrix.environment == 'production' && 'latest' || 'edge' }}
+      DOCKER_TAG: ${{ (inputs.environment || matrix.environment) == 'production' && 'latest' || 'edge' }}
       DOCKER_REGISTRY: ghcr.io
       DOCKER_NAMESPACE: ${{ github.repository_owner }}
       DOCKER_EXTRA_ARGS: --label org.opencontainers.image.source=https://github.com/${{ github.repository }} --cache-from type=gha,mode=max --cache-to type=gha,mode=max
@@ -46,6 +46,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - uses: ./actions/infra-build-images
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          namespace: ${{ env.DOCKER_NAMESPACE }}
+          docker-tag: ${{ env.DOCKER_TAG }}
+          extra-args: ${{ env.DOCKER_EXTRA_ARGS }}
+      
       - uses: ./actions/infra-build-images
         with:
           registry: ${{ env.DOCKER_REGISTRY }}
