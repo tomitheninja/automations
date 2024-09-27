@@ -24,11 +24,12 @@ jobs:
 
     steps:
       - id: set-env
-        run: if [ "${{ github.event_name }}" == "workflow_dispatch" ]
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]
           then
-          echo "environments=[\"${{ github.event.inputs.environment }}\"]" >> "$GITHUB_OUTPUT"
+            echo "environments=[\"${{ github.event.inputs.environment }}\"]" >> "$GITHUB_OUTPUT"
           else
-          echo 'environments=["staging", "production"]' >> "$GITHUB_OUTPUT"
+            echo 'environments=["staging", "production"]' >> "$GITHUB_OUTPUT"
           fi
 
   depoy:
